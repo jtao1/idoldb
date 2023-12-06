@@ -1,9 +1,9 @@
 import sqlalchemy
 
-def idol_insert_row(db_conn, data):
+def idol_insert_row(db_conn, table, data):
     insert_idol = sqlalchemy.text(
-        """INSERT INTO 
-        idols (idol_id, name, stage_name, group_, company, country, birthdate, height_cm) 
+        f"""INSERT INTO 
+        {table} (idol_id, name, stage_name, group_, company, country, birthdate, height_cm) 
         VALUES (:id, :name, :stage_name, :group_, :company, :country, :birthdate, :height_cm)"""
     )
     id, name, stage_name, group, company, country, birthdate, height = data
