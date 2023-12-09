@@ -2,12 +2,23 @@ import panel as pn
 import pandas as pd
 
 import connect
-import idol_actions
+import widgets
 
 import inserts
 import selects
 import edits
 import deletes
+
+#widgets
+idol_select = widgets.select()
+idol_insert = widgets.idol_insert()
+group_insert = widgets.group_insert()
+company_insert = widgets.company_insert()
+idol_edit = widgets.edit()
+idol_delete = widgets.delete()
+for widgets in [idol_select, idol_insert, group_insert, company_insert, idol_edit, idol_delete]:
+    for widget in widgets:
+        widget.width = 150
 
 def execute_action(event):
     if table_menu.clicked == None:
@@ -30,18 +41,21 @@ def execute_action(event):
 def sql_actions(event):
     main.objects = [main_row]
     main_sub_row.objects = []
-    action_menu.name = action_menu.clicked
+    action_menu.name = action_menu.clicked or 'SQL Action'
+    table_menu.name = table_menu.clicked or 'Tables'
     if action_menu.clicked == 'select':
         main_sub_row.objects = idol_select
     elif action_menu.clicked == 'insert':
-        main_sub_row.objects = idol_insert
+        if table_menu.clicked == 'idols' or table_menu.clicked == None:
+            main_sub_row.objects = idol_insert
+        elif table_menu.clicked == 'groups':
+            main_sub_row.objects = group_insert
+        elif table_menu.clicked == 'companies':
+            main_sub_row.objects = company_insert
     elif action_menu.clicked == 'edit':
         main_sub_row.objects = idol_edit
     elif action_menu.clicked == 'delete':
         main_sub_row.objects = idol_delete
-
-def table_select(event):
-    table_menu.name = table_menu.clicked
 
 conn = connect.db_conn()
 pn.extension(sizing_mode='stretch_width')
@@ -54,23 +68,12 @@ action_menu = pn.widgets.MenuButton(name='SQL Action', items=action_menu_items, 
 action_menu.on_click(sql_actions)
 
 table_menu_items = [('Idols', 'idols'), ('Groups', 'groups'), ('Companies', 'companies')]
-table_menu = pn.widgets.MenuButton(name='Tables', items=table_menu_items, button_type='primary', width = 100)
-table_menu.on_click(table_select)
+table_menu = pn.widgets.MenuButton(name='Tables', items=table_menu_items, button_type='primary', width=100)
+table_menu.on_click(sql_actions)
 
 main_sub_row = pn.Row()
 main_row = pn.Row(action_menu, table_menu, main_sub_row, main_button)
 main = pn.Column(main_row)
-
-#action menu select
-idol_select = idol_actions.select()
-#action menu insert
-idol_insert = idol_actions.insert()
-
-#action menu edit
-idol_edit = idol_actions.edit()
-
-#delete objects
-idol_delete = idol_actions.delete()
 
 app = pn.Tabs(('Main', main), ('Report'))
 
