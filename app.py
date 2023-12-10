@@ -37,6 +37,7 @@ def execute_action(event):
         edits.edit_query(conn, table_menu.clicked, sql_edit[0].value, sql_edit[1].value, sql_edit[2].value)
     elif action_menu.clicked == 'delete':
         deletes.delete_row(conn, table_menu.clicked, sql_delete[0].value)
+        sql_delete[0].name = 'work'
 
 def sql_actions(event):
     main.objects = [main_row]

@@ -2,7 +2,7 @@ import panel as pn
 
 def select():
     select_input = pn.widgets.IntInput(name='Input an id')
-    select_tool_tip = pn.widgets.TooltipIcon(value='Input 0 to SELECT ALL')
+    select_tool_tip = pn.widgets.TooltipIcon(value='Input -1 to SELECT ALL')
     return [select_input, select_tool_tip]
 
 def idol_insert():
@@ -13,8 +13,9 @@ def idol_insert():
     insert_company = pn.widgets.TextInput(name='company')
     insert_country = pn.widgets.TextInput(name='country')
     insert_birthdate = pn.widgets.TextInput(name='birthdate')
+    insert_gender = pn.widgets.Select(name='gender', options=['Male', 'Female', 'Other'])
     insert_height = pn.widgets.IntInput(name='height (cm)')
-    return [insert_idol_id, insert_name, insert_stage_name, insert_group, insert_company, insert_country, insert_birthdate, insert_height]
+    return [insert_idol_id, insert_name, insert_stage_name, insert_group, insert_company, insert_country, insert_birthdate, insert_gender, insert_height]
 
 def group_insert():
     insert_id = pn.widgets.IntInput(name='id')
