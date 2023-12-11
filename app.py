@@ -30,10 +30,11 @@ def execute_action(event):
     
     if action_menu.clicked == 'select':
         df = selects.select_data(conn, table_menu.clicked, sql_select[0].value)
-        if sql_select[2].value != 'none':
+        if sql_select[2].value != 'none' and table_menu.name == 'Idols':
             df = df[df[sql_select[2].value] == sql_select[3].value]
+        if table_menu.name == 'Idols':
+            reports(df)
         df_pane = pn.pane.DataFrame(df)
-        reports(df)
         main.append(df_pane)
     elif action_menu.clicked == 'insert':
         data = [data.value for data in insert_table_dict[table_menu.clicked]]
@@ -48,9 +49,12 @@ def sql_actions(event):
     main.objects = [main_row]
     main_sub_row.objects = []
     action_menu.name = 'SQL Action' if action_menu.clicked is None else next(display for display, value in action_menu_items if value == action_menu.clicked)
-    table_menu.name = 'idols' if table_menu.clicked is None else next(display for display, value in table_menu_items if value == table_menu.clicked)
+    table_menu.name = 'Idols' if table_menu.clicked is None else next(display for display, value in table_menu_items if value == table_menu.clicked)
     if action_menu.clicked == 'select':
         main_sub_row.objects = sql_select
+        if table_menu.name != 'Idols':
+            main_sub_row.remove(sql_select[2])
+            main_sub_row.remove(sql_select[3])
     elif action_menu.clicked == 'insert':
         if table_menu.clicked == 'idols' or table_menu.clicked == None:
             main_sub_row.objects = sql_idol_insert
