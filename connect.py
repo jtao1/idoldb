@@ -27,6 +27,7 @@ def db_conn():
     engine = create_engine(
         "mysql+pymysql://",
         creator=getconn,
+        isolation_level='READ COMMITTED'
     )
 
     Base.metadata.create_all(engine)
