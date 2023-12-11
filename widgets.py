@@ -3,7 +3,9 @@ import panel as pn
 def select():
     select_input = pn.widgets.IntInput(name='Input an id')
     select_tool_tip = pn.widgets.TooltipIcon(value='Input -1 to SELECT ALL')
-    return [select_input, select_tool_tip]
+    select_report = pn.widgets.Select(name='Only select', options={'none':'none','group':'group_', 'company':'company', 'gender':'gender'})
+    select_report_input = pn.widgets.TextInput(name='input')
+    return [select_input, select_tool_tip, select_report, select_report_input]
 
 def idol_insert():
     insert_idol_id = pn.widgets.IntInput(name='id')
@@ -41,3 +43,9 @@ def edit():
 def delete():
     delete_input = pn.widgets.TextInput(name='id')
     return [delete_input]
+
+def report():
+    num_idols = pn.widgets.TextInput(name='number of idols', disabled=True)
+    average_height = pn.widgets.TextInput(name='average height', disabled=True)
+    average_age = pn.widgets.TextInput(name='average age', disabled=True)
+    return [num_idols, average_height, average_age]

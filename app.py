@@ -8,6 +8,7 @@ import inserts
 import selects
 import edits
 import deletes
+import datetime
 
 #widgets
 sql_select = widgets.select()
@@ -16,6 +17,7 @@ sql_group_insert = widgets.group_insert()
 sql_company_insert = widgets.company_insert()
 sql_edit = widgets.edit()
 sql_delete = widgets.delete()
+report_widgets = widgets.report()
 insert_table_dict = {'idols':sql_idol_insert, 'group_':sql_group_insert, 'company':sql_company_insert}
 for widgets in [sql_select, sql_idol_insert, sql_group_insert, sql_company_insert, sql_edit, sql_delete]:
     for widget in widgets:
@@ -28,7 +30,10 @@ def execute_action(event):
     
     if action_menu.clicked == 'select':
         df = selects.select_data(conn, table_menu.clicked, sql_select[0].value)
+        if sql_select[2].value != 'none':
+            df = df[df[sql_select[2].value] == sql_select[3].value]
         df_pane = pn.pane.DataFrame(df)
+        reports(df)
         main.append(df_pane)
     elif action_menu.clicked == 'insert':
         data = [data.value for data in insert_table_dict[table_menu.clicked]]
@@ -58,6 +63,16 @@ def sql_actions(event):
     elif action_menu.clicked == 'delete':
         main_sub_row.objects = sql_delete
 
+def reports(df):
+    report.objects = []
+    report.objects = report_widgets
+    report.objects[0].value = str(len(df))
+    report.objects[1].value = str(df['height_cm'].mean())
+
+    df['birthdate'] = pd.to_datetime(df['birthdate'])
+    df['age'] = (pd.to_datetime('today') - df['birthdate']).dt.days // 365.25
+    report.objects[2].value = str(df['age'].mean())
+
 conn = connect.db_conn()
 pn.extension(sizing_mode='stretch_width')
 
@@ -76,7 +91,10 @@ main_sub_row = pn.Row()
 main_row = pn.Row(action_menu, table_menu, main_sub_row, main_button)
 main = pn.Column(main_row)
 
-app = pn.Tabs(('Main', main), ('Report'))
+
+report = pn.Column()
+
+app = pn.Tabs(('Main', main), ('Report', report))
 
 app.servable()
 

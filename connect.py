@@ -41,11 +41,11 @@ class Idols(Base):
     __tablename__ = 'idols'
 
     idol_id = Column(Integer, primary_key=True)
-    birthdate = Column(Date)
-    company = Column(String(255))
+    birthdate = Column((Date), index=True)
+    company = Column(String(255), index=True)
     country = Column(String(255))
-    gender = Column(String(255))
-    group_ = Column(String(255))
+    gender = Column(String(255), index=True)
+    group_ = Column(String(255), index=True)
     height_cm = Column(Integer)
     name = Column(String(255))
     stage_name = Column(String(255))
@@ -57,12 +57,12 @@ class Groups(Base):
     code = Column(String(255))
     company = Column(String(255))
     member_count = Column(Integer)
-    name = Column(String(255))
+    name = Column(String(255), index=True)
 
 class Company(Base):
     __tablename__ = 'company'
 
     company_id = Column(Integer, primary_key=True)
-    company_name = Column(String(255))
+    company_name = Column(String(255), index=True)
     group_count = Column(Integer)
     idol_count = Column(Integer)
